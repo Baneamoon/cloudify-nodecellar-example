@@ -153,3 +153,21 @@ outputs:
     value:
       ip_address: { get_attribute: [ nodecellar_ip, floating_ip_address ] }
       port: { get_property: [ nodecellar, port ] }
+      
+groups:
+  mongod_hosts:
+    members: [mongod_host]
+    policies:
+      mem_scale_policy:
+        type: cloudify.policies.types.threshold
+        properties:
+          service: cpu.total.user
+          threshold: 20
+        triggers:
+          scale_trigger:
+            type: cloudify.policies.triggers.execute_workflow
+            parameters:
+              workflow: scale
+              workflow_parameters:
+                node_id: mongod
+                delta: 1
