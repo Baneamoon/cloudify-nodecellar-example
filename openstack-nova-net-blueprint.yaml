@@ -39,6 +39,13 @@ node_templates:
   nodecellar:
     type: nodecellar.nodes.NodecellarApplicationModule
     relationships:
+    
+  policy_group:
+    type: OS::Nova::ServerGroup
+    properties:
+      name: asra-anti-affinity
+      policies: [anti-affinity]
+ 
 
       ################################
       # Setting the mongo connection
@@ -131,6 +138,8 @@ node_templates:
           port: { get_property: [ mongod, port ] }
         - cidr: 0.0.0.0/0
           port: 28017
+
+
 
   ###########################################################
   # A floating ip to be attached to the nodejs host, since
