@@ -87,7 +87,7 @@ node_templates:
       # Attaching a floating ip to the nodejs host
       ###########################################################
 
-      - target: nodecellar_ip
+        target: nodecellar_ip
         type: cloudify.openstack.server_connected_to_floating_ip
 
       ###########################################################
