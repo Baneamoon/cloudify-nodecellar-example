@@ -140,7 +140,7 @@ node_templates:
 
   nodecellar_ip:
     type: cloudify.openstack.nova_net.nodes.FloatingIP
-resources
+resources:
   # Create the Anti-affinity Group
   policy_group:
     type: OS::Nova::ServerGroup
