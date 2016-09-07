@@ -134,8 +134,8 @@ node_templates:
         - cidr: 0.0.0.0/0
           port: 28017
 
-
-policy_group:
+resources:
+  policy_group:
     type: OS::Nova::ServerGroup
     properties:
       name: asra-anti-affinity
