@@ -140,6 +140,14 @@ node_templates:
 
   nodecellar_ip:
     type: cloudify.openstack.nova_net.nodes.FloatingIP
+resources
+  # Create the Anti-affinity Group
+  policy_group:
+    type: OS::Nova::ServerGroup
+    properties:
+      name: web-anti-affinity
+      policies: [anti-affinity]
+
 
 ###########################################################
 # This outputs section exposes the application endpoint.
