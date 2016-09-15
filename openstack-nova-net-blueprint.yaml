@@ -140,13 +140,24 @@ node_templates:
 
   nodecellar_ip:
     type: cloudify.openstack.nova_net.nodes.FloatingIP
-resources:
-  # Create the Anti-affinity Group
-  policy_group:
-    type: OS::Nova::ServerGroup
-    properties:
-      name: web-anti-affinity
-      policies: [anti-affinity]
+    
+groups:
+  clearwater_hosts:
+    members: [mongod_host]
+    policies:
+      mem_scale_policy:
+        type: cloudify.policies.types.threshold
+        properties:
+          service: mongod_incoming
+          threshold: 20
+        triggers:
+          scale_trigger:
+            type: cloudify.policies.triggers.execute_workflow
+            parameters:
+              workflow: scale
+              workflow_parameters:
+                node_id: mongod
+                delta: 1
 
 
 ###########################################################
