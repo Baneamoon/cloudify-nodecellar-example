@@ -166,9 +166,9 @@ groups:
             parameters:
               workflow: scale
               workflow_parameters:
-                scalable_entity_name: mongod
+                scalable_entity_name: mongod_host
+               scale_compute: true 
                 delta: 1
-                scale_compute: true
                 max_instances: 5
                 
                 
@@ -178,14 +178,14 @@ groups:
           service: cpu.total.user
           threshold: 10
           upper_bound: false
-          stability_time: 180
+          stability_time: 300
         triggers:
           scale_trigger:
             type: cloudify.policies.triggers.execute_workflow
             parameters:
               workflow: scale
               workflow_parameters:
-                scalable_entity_name: mongod
+                scalable_entity_name: mongod_host
                 scale_compute: true
                 min_instances: 1
                 delta: -1
