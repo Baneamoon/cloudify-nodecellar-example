@@ -146,23 +146,49 @@ node_templates:
 # You can access it by running:
 #   - cfy deployments outputs <deployment_id>
 ###########################################################
+
+
 groups:
-  clearwater_hosts:
+
+  nodecellar_hosts:
     members: [mongod_host]
     policies:
-      mem_scale_policy:
+      up_scale_policy:
         type: cloudify.policies.types.threshold
         properties:
-          service: mongod_incoming
+          service: cpu.total.user
           threshold: 20
+          stability_time: 60
         triggers:
           scale_trigger:
             type: cloudify.policies.triggers.execute_workflow
             parameters:
               workflow: scale
               workflow_parameters:
-                node_id: mongod
+                scalable_entity_name: mongod
                 delta: 1
+                scale_compute: true
+                max_instances: 5
+                
+                
+      down_scale_policy:
+        type: cloudify.policies.types.threshold
+        properties:
+          service: cpu.total.user
+          threshold: 10
+          upper_bound: false
+          stability_time: 180
+        triggers:
+          scale_trigger:
+            type: cloudify.policies.triggers.execute_workflow
+            parameters:
+              workflow: scale
+              workflow_parameters:
+                scalable_entity_name: mongod
+                scale_compute: true
+                min_instances: 1
+                delta: -1
+                
 
 outputs:
   endpoint:
