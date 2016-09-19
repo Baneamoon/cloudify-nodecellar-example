@@ -150,7 +150,7 @@ node_templates:
 
 groups:
 
-  nodecellar_hosts:
+  scale_group:
     members: [mongod_host]
     policies:
       up_scale_policy:
@@ -158,6 +158,7 @@ groups:
         properties:
           service: cpu.total.user
           threshold: 20
+          upper_bound: true
           stability_time: 60
         triggers:
           scale_trigger:
