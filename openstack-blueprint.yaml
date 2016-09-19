@@ -167,9 +167,9 @@ groups:
               workflow: scale
               workflow_parameters:
                scalable_entity_name: mongod_host
-               scale_compute: true 
+                scale_compute: true 
                 delta: 1
-                max_instances: 5
+                
                 
                 
       down_scale_policy:
@@ -185,9 +185,8 @@ groups:
             parameters:
               workflow: scale
               workflow_parameters:
-                scalable_entity_name: mongod_host
+                node_id: mongod_host
                 scale_compute: true
-                min_instances: 1
                 delta: -1
                 
 
