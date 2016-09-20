@@ -150,45 +150,48 @@ node_templates:
 
 groups:
 
-  scale_group:
+  scale_up_group:
     members: [mongod_host]
     policies:
-      up_scale_policy:
-        type: cloudify.policies.types.threshold
+      auto_scale_up:
+        type: scale_policy_type
         properties:
-          service: cpu.total.user
-          threshold: 20
-          upper_bound: true
-          stability_time: 60
+          policy_operates_on_group: true
+          scale_limit: 6
+          scale_direction: '<'
+          scale_threshold: 6
+          service_selector: .*nodejs_host.*.process.node.cpu.percent
+          cooldown_time: 60
         triggers:
-          scale_trigger:
+          execute_scale_workflow:
             type: cloudify.policies.triggers.execute_workflow
             parameters:
               workflow: scale
               workflow_parameters:
-               scalable_entity_name: mongod_host
-                scale_compute: true 
                 delta: 1
-                
-                
-                
-      down_scale_policy:
-        type: cloudify.policies.types.threshold
+                node_id: nodecellar
+                scale_compute: true
+
+  scale_down_group:
+    members: [mongod_host]
+    policies:
+      auto_scale_down:
+        type: scale_policy_type
         properties:
-          service: cpu.total.user
-          threshold: 10
-          upper_bound: false
-          stability_time: 300
+          scale_limit: 2
+          scale_direction: '>'
+          scale_threshold: 1
+          service_selector: .*nodejs_host.*.process.node.cpu.percent
+          cooldown_time: 60
         triggers:
-          scale_trigger:
+          execute_scale_workflow:
             type: cloudify.policies.triggers.execute_workflow
             parameters:
               workflow: scale
               workflow_parameters:
-                node_id: mongod_host
-                scale_compute: true
                 delta: -1
-                
+                node_id: nodecellar
+                scale_compute: true
 
 outputs:
   endpoint:
